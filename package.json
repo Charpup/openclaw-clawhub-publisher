@@ -1,0 +1,25 @@
+{
+  "name": "clawhub-publisher",
+  "version": "1.0.0",
+  "description": "ClawHub skill publisher with token management and retry logic",
+  "main": "lib/clawhub-publisher.js",
+  "bin": {
+    "clawhub-publisher": "./bin/clawhub-publisher"
+  },
+  "scripts": {
+    "test": "jest",
+    "login": "node lib/clawhub-publisher.js login",
+    "publish": "node lib/clawhub-publisher.js publish"
+  },
+  "keywords": ["clawhub", "openclaw", "skill", "publisher", "registry"],
+  "author": "Galatea",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Charpup/openclaw-clawhub-publisher.git"
+  }
+}
