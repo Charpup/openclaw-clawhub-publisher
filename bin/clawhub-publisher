@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+/**
+ * CLI for ClawHub Publisher
+ */
+
+const { ClawHubPublisher } = require('../lib/clawhub-publisher');
+
+const command = process.argv[2];
+
+async function main() {
+  const publisher = new ClawHubPublisher();
+
+  switch (command) {
+    case 'login':
+      console.log('Logging in to ClawHub...');
+      try {
+        await publisher.login();
+        console.log('✓ Login successful');
+        process.exit(0);
+      } catch (error) {
+        console.error('✗ Login failed:', error.message);
+        process.exit(1);
+      }
+      break;
+
+    case 'publish': {
+      const [skillPath, slug, name, version = '1.0.0'] = process.argv.slice(3);
+      
+      if (!skillPath || !slug || !name) {
+        console.error('Usage: clawhub-publisher publish <skill-path> <slug> <name> [version]');
+        process.exit(1);
+      }
+
+      console.log(`Publishing ${slug}@${version}...`);
+      try {
+        const result = await publisher.publish(skillPath, { 
+          slug, 
+          name, 
+          version,
+          tags: 'latest',
+          changelog: `Release ${version}`
+        });
+        console.log('✓ Published successfully');
+        process.exit(0);
+      } catch (error) {
+        console.error('✗ Publish failed:', error.message);
+        process.exit(1);
+      }
+      break;
+    }
+
+    default:
+      console.log(`
+ClawHub Publisher CLI
+
+Usage:
+  clawhub-publisher login                    - Login to ClawHub
+  clawhub-publisher publish <path> <slug> <name> [version]  - Publish skill
+
+Environment:
+  CLAWHUB_TOKEN - API token (required)
+`);
+      process.exit(0);
+  }
+}
+
+main().catch(err => {
+  console.error('Error:', err.message);
+  process.exit(1);
+});
